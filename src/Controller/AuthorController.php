@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\AuthorRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,5 +52,14 @@ class AuthorController extends AbstractController
         return $this->render('author/showAuthor.html.twig', [
             'author' => $author,
         ]);
+    }
+    #[Route('/listAuthor', name: 'authors')]
+    public function list(AuthorRepository $repository)
+    {
+        $authors = $repository->findAll();
+        return $this->render(view:"author/listAuthors.html.twig",
+            parameters: array(
+            'tabAuthors'=>$authors
+        ));
     }
 }
