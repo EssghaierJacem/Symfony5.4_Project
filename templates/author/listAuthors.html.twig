@@ -1,7 +1,72 @@
-{% for author in tabAuthors %}
-
-                      {{ author.id }}
-                      {{ author.username|capitalize }}
-                      {{ author.email }}
-                      <br>
-{% endfor %}
+<head>
+    <meta charset="UTF-8">
+    <title>List of Authors</title>
+<style>
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        h5 {
+            color: #ff0000;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        img {
+            display: block;
+            margin: 40px auto;
+            border-radius: 70%;
+        }
+    </style>
+</head>
+<body>
+    <h1>List of Authors</h1>
+    {% if tabAuthors is empty %}
+            <h5>No authors available</h5>
+        {% else %}
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+        {% for author in tabAuthors %}
+                    <tr>
+                     <td>{{ author.id }}</td>
+                     <td>{{ author.username|capitalize }}</td>
+                     <td>{{ author.email }}</td>
+                     <td><a href="#">Show Details</a></td>
+                     </tr>
+        {% endfor %}
+         </table>
+     {% endif %}
+<p>Total Authors: {{ tabAuthors|length }}</p>
+         <img src="{{ asset('img/symfony.png') }}" alt="Symfony Live" width="150px" height="150px">
+    </div>
+</body>
