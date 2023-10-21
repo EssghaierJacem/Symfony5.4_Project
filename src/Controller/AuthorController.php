@@ -72,6 +72,7 @@ class AuthorController extends AbstractController
         $author= new Author();
         $author->setEmail("author6@gmail.com");
         $author->setUsername("author6");
+        $author->setNbrBook(40);
         // $em= $this->getDoctrine()->getManager();
         $em= $managerRegistry->getManager();
         $em->persist($author);
@@ -101,7 +102,7 @@ class AuthorController extends AbstractController
         $em= $managerRegistry->getManager();
         if($author->getNbrBook()==0){
             $em->remove($author);
-            $em->flush() ;
+            $em->flush();
         }
         else{
             return new  Response("Error!!");

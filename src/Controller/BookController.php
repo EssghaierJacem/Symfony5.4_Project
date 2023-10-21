@@ -37,11 +37,7 @@ class BookController extends AbstractController
         }
         return $this->renderForm('book/add.html.twig',array("formulaireBook"=>$form));
     }
-    #[Route('/showBook', name: 'show_book')]
-    public function showBook(BookRepository $bookRepository){
-        return $this->render("book/show.html.twig",
-            ['books'=>$bookRepository->findAll()]);
-    }
+
     #[Route('/updateBook/{ref}', name: 'update_book')]
     public function updateBook($ref,BookRepository $repository,ManagerRegistry $manager, Request $request): Response
     {
@@ -69,5 +65,18 @@ class BookController extends AbstractController
         return $this->render('book/showBook.html.twig',
             array('book'=>$repository->find($ref)));
     }
-}
+    #[Route('/deleteBook/{ref}', name:'delete_book')]
+    public function deleteBook($ref,BookRepository $bookRepository, ManagerRegistry $managerRegistry)
+    {
+        $book = $bookRepository->find($ref);
+
+        $em = $managerRegistry->getManager();
+        $em->remove($book);
+        $em->flush();
+
+        return $this->redirectToRoute('list_book');
+        }
+    }
+
+
 
