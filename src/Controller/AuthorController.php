@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Author;
+use App\Form\AuthorType;
 use App\Repository\AuthorRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\Author;
-
 
 class AuthorController extends AbstractController
 {
@@ -92,14 +93,20 @@ class AuthorController extends AbstractController
         return $this->redirectToRoute("authors");
     }
 
-    #[Route('/remove/{id}', name: 'remove_authors')]
-    public function deleteAuthor(AuthorRepository $repository,$id,
-                                 ManagerRegistry $managerRegistry)
+
+    #[Route('/delete/{id}', name: 'delete')]
+    public function deleteAuthor($id,AuthorRepository $repository,ManagerRegistry $managerRegistry)
     {
         $author= $repository->find($id);
-        $em = $managerRegistry->getManager();
-        $em->remove($author);
-        $em->flush();
+        $em= $managerRegistry->getManager();
+        if($author->getNbrBook()==0){
+            $em->remove($author);
+            $em->flush() ;
+        }
+        else{
+            return new  Response("Error!!");
+        }
         return $this->redirectToRoute("authors");
     }
+
 }

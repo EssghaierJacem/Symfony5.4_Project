@@ -45,27 +45,42 @@
     </style>
 </head>
  <body>
-         <h1>List of Authors</h1>
+         <h1>List of Books</h1>
  <table>
                  <tr>
                      <th>Réf</th>
                      <th>Title</th>
-                     <th>Enabled</th>
+                     <th>Published</th>
                      <th>Publication Date</th>
                      <th>Category</th>
                      <th>Author</th>
                      <th>Action</th>
                  </tr>
+                 {% set published_Book=0 %}
+                 {% set unpublished_Book=0 %}
  {% for book in books %}
+            {% if book.enabled == true %}
+                 {% set published_Book=published_Book+1 %}
+            {% else %}
+                 {% set unpublished_Book=unpublished_Book+1 %}
+            {% endif %}
                     <tr>
                      <td>{{ book.ref }}</td>
-                     <td>{{ book.title}}</td>
+                     <td>{{ book.title | upper }}</td>
                      <td>{{ book.enabled }}</td>
                      <td>{{ book.publicationDate | date }}</td>
                      <td>{{ book.category }}</td>
                      <td>{{ book.author }}</td>
-             <td><a href="#">Show Details</a></td>
+             <td><a href="{{ path('show_book', { ref: book.ref }) }}">Show</a>
+                 <a href="{{ path('update_book', { ref: book.ref }) }}">Update</a>
+                 <a href="#">Delete</a></td>
                      </tr>
+                     {% else %}
+                     <h5>The table is empty</h5>
         {% endfor %}
+       </table>
+        <h4>Number of books = {{ books | length}}</h5>
+        <h4>Published Books = {{ published_Book }}</h5>
+        <h4>Unpublished Books  = {{ unpublished_Book }}</h5>
     </div>
 </body>
