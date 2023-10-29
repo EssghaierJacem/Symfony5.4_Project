@@ -45,12 +45,7 @@
     </style>
 </head>
  <body>
-         <h1>List of Books</h1>
-           <form method="GET" action="{{ path('list_book') }}">
-                 <label for="ref"><h4>Search by Réf:</h4></label>
-                 <input type="text" id="ref" name="ref"/>
-                 <button type="submit">Search</button>
-           </form>
+         <h1>List of Books Sorted By Date</h1>
  <table>
                  <tr>
                      <th>Réf</th>
@@ -61,14 +56,7 @@
                      <th>Author</th>
                      <th>Action</th>
                  </tr>
-                 {% set published_Book=0 %}
-                 {% set unpublished_Book=0 %}
  {% for book in books %}
-            {% if book.enabled == true %}
-                 {% set published_Book=published_Book+1 %}
-            {% else %}
-                 {% set unpublished_Book=unpublished_Book+1 %}
-            {% endif %}
                     <tr>
                      <td>{{ book.ref }}</td>
                      <td>{{ book.title | upper }}</td>
@@ -76,17 +64,13 @@
                      <td>{{ book.publicationDate | date }}</td>
                      <td>{{ book.category }}</td>
                      <td>{{ book.author }}</td>
-             <td><a href="{{ path('show_book', { ref: book.ref }) }}">Show</a>
-                 <a href="{{ path('update_book', { ref: book.ref }) }}">Update</a>
+             <td><a href="#">Show</a>
+                 <a href="#">Update</a>
                  <a href="#">Delete</a></td>
                      </tr>
                      {% else %}
                      <h5>The table is empty</h5>
         {% endfor %}
        </table>
-        <h4>Number of books = {{ books | length}}</h5>
-        <h4>Published Books = {{ published_Book }}</h5>
-        <h4>Unpublished Books  = {{ unpublished_Book }}</h5>
-        <h4>Romance Books  = {{ romancebooks| length }}</h5>
     </div>
 </body>

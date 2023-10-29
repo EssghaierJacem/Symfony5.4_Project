@@ -49,11 +49,17 @@
     {% if tabAuthors is empty %}
             <h5>No authors available</h5>
         {% else %}
+      <form action="{{ path('authors') }}" method="get">
+          <input type="text" name="min_books" placeholder="Minimum books">
+          <input type="text" name="max_books" placeholder="Maximum books">
+          <button type="submit">Search</button>
+      </form>
                 <table>
                     <tr>
                         <th>ID</th>
                         <th>Username</th>
                         <th>Email</th>
+                        <th>Books Published</th>
                         <th>Action</th>
                     </tr>
         {% for author in tabAuthors %}
@@ -61,6 +67,7 @@
                      <td>{{ author.id }}</td>
                      <td>{{ author.username|capitalize }}</td>
                      <td>{{ author.email }}</td>
+                     <td>{{ author.nbrBook }}</td>
                      <td><a href="#">Show Details</a></td>
                      </tr>
         {% endfor %}

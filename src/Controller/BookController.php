@@ -52,11 +52,26 @@ class BookController extends AbstractController
         return $this->renderForm('book/updateBook.html.twig', ['form' => $form]);
     }
     #[Route('/listBook', name: 'list_book')]
-    public function listBook(BookRepository $bookrepository)
+    public function listBook(Request $request, BookRepository $bookrepository)
     {
-
+        $ref = $request->query->get('ref');
+        $books = [];
+        if ($ref) {
+            $books = $bookrepository->searchBookByRef($ref);
+        } else {
+            $books = $bookrepository->findAll();
+        }
+        $romancebooks = $bookrepository->countRomanceBooks();
         return $this->render('book/show.html.twig', [
-            'books' => $bookrepository->findAll(),
+            'books' => $books,
+            'romancebooks' => $romancebooks,
+        ]);
+    }
+    #[Route('/DateBook', name: 'date_book')]
+    public function listBookDate(Request $request, BookRepository $bookrepository){
+        $books = $bookrepository->BookSortDate();
+        return $this->render('book/datebook.html.twig', [
+            'books' => $books,
         ]);
     }
     #[Route('/showBook/{ref}', name: 'show_book')]
@@ -75,7 +90,41 @@ class BookController extends AbstractController
         $em->flush();
 
         return $this->redirectToRoute('list_book');
-        }
+    }
+    #[Route("/booksByAuthors", name:"books_by_authors")]
+    public function booksByAuthors(BookRepository $bookRepository)
+    {
+        $books = $bookRepository->booksListByAuthors();
+
+        return $this->render('book/bAuthors.html.twig', [
+            'books' => $books,
+        ]);
+    }
+    #[Route("/booksByDate", name:"books_by_date")]
+    public function BooksDatePublished(BookRepository $bookRepository)
+    {
+        $books = $bookRepository->BookPublishedDate();
+
+        return $this->render('book/BookPublishedDate.html.twig', [
+            'books' => $books,
+        ]);
+    }
+    #[Route("/UpdateBooks", name:"BooksUpdate")]
+    public function UpdateBookGenre(BookRepository $bookRepository, ManagerRegistry $managerRegistry): Response
+    {
+        $bookRepository->UpdateBook();
+        $em = $managerRegistry->getManager();
+        $em->flush();
+        return $this->redirectToRoute('list_book');
+    }
+    /*#[Route('/showbookAuthor/{date}', name:'author_book')]
+            public function ShowBookAuthor($date, BookRepository $bookRepository, ManagerRegistry $managerRegistry){
+            $from = new \DateTime($date . '2023-01-01 ');
+            $books = $bookRepository->findByDate($from);
+            return $this->render('book/showBookAuthor.html.twig', [
+            'books' => $books,]);
+    }
+    */
     }
 
 
